@@ -5,16 +5,45 @@
 
 # Google's Python Class
 # http://code.google.com/edu/languages/google-python-class/
-
 import sys
 import re
 import os
 import shutil
 import commands
-
+import os.path
 """Copy Special exercise
 """
 
+def get_special_paths(dir):
+	dup=[]
+	filenames=os.listdir(dir)
+	for filename in filenames:
+		match=re.search(r'__(\w+)__', filename)
+		if match:
+			dup.append(os.path.abspath(filename))
+	return dup
+	
+
+
+def copy_to(paths,dir):
+	var=os.path.exists(dir)
+	if not var:
+		os.makedirs(dir)
+	for filename in paths:
+		 shutil.copy(filename,dir)
+
+
+def zip_to(paths, zippath):
+  cmd = 'zip -j ' + zippath + ' ' + ' '.join(paths)
+  print "Command I'm going to do:" + cmd
+  (status, output) = commands.getstatusoutput(cmd)
+  # If command had a problem (status is non-zero),
+  # print its output to stderr and exit.
+  if status:
+    sys.stderr.write(output)
+    sys.exit(1)
+
+	
 # +++your code here+++
 # Write functions and modify main() to call them
 
@@ -50,6 +79,42 @@ def main():
 
   # +++your code here+++
   # Call your functions
-  
+  # LAB(begin solution)
+
+  # Gather all the special files
+  paths = []
+  for dirname in args:
+    paths.extend(get_special_paths(dirname))
+
+  if todir:
+    copy_to(paths, todir)
+  elif tozip:
+    zip_to(paths, tozip)
+  else:
+    print '\n'.join(paths)
+  # LAB(end solution)
+
 if __name__ == "__main__":
   main()
+                       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                                                                                                                                            
