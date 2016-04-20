@@ -24,7 +24,30 @@ def read_urls(filename):
   extracting the hostname from the filename itself.
   Screens out duplicate urls and returns the urls sorted into
   increasing order."""
-  # +++your code here+++
+  list2=[]
+  list3=[]
+  ufile = urllib.urlopen(filename)
+  info = ufile.info()
+  if info.gettype() == 'application/x-msdos-program':
+  	string =ufile.geturl()
+        string=string[7:]
+        string='http://'+string
+        text = ufile.read()
+        list1= re.findall('/[\w/.-]+jpg',text)
+        for i in list1:
+        	if i not in list2:
+                	list2.append(i)
+
+#               list2.sort()
+#               return list2
+        for i in list2:
+        	list3.append(string+i)
+#               return list3
+        list10=[]
+	string1=""
+        list10=sorted(list3,key=lambda x:x[-8:-4])
+        return list10
+
   
 
 def download_images(img_urls, dest_dir):
@@ -35,7 +58,25 @@ def download_images(img_urls, dest_dir):
   with an img tag to show each local image file.
   Creates the directory if necessary.
   """
-  # +++your code here+++
+  list4=[]
+  var=os.path.exists(dest_dir)
+  if not var:
+  	os.makedirs(dest_dir)
+
+#  list4=img_urls
+  
+  j=0
+  for i in img_urls:
+  	filename=os.path.join(os.path.abspath(dest_dir),'img'+str(j))
+        j=j+1
+	print 'Retrieving...',i
+        urllib.urlretrieve(i, filename)
+
+  filename=os.path.join(os.path.abspath(dest_dir),'index.html')
+  f=open(filename,'w')
+
+  f.write("<verbatim><html><body><img src='img0'><img src='img1'><img src='img2'><img src='img3'><img src='img4'><img src='img5'><img src='img6'><img src='img7'><img src='img8'><img src='img9'><img src='img10'><img src='img11'><img src='img12'><img src='img13'><img src='img14'><img src='img15'><img src='img16'><img src='img17'><img src='img18'><img src='img19'></body></html>")
+
   
 
 def main():
